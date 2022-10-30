@@ -9,21 +9,24 @@
 
 using namespace std;
 
-string findID(map<string, unsigned int> idViews) {
-    string result;
-    unsigned int max = 0;
+string findID(map<string, long long> idViews) {
+    string result = "zzzzz";
+    long long max = 0;
     for (auto e: idViews) {
         string key = e.first;
-        unsigned int val = e.second;
-        if (val >= max) {
-            max = val;
-            result = key;
+        long long val = e.second;
+        if (val < max) continue;
+        if (val == max) {
+            if (key.compare(result) < 0) result = key;
+            continue;
         }
+        max = val;
+        result = key;
     }
     return result;
 }
 
-vector<vector<string>> solve(map<string, unsigned int> sumViews, map<string, map<string, unsigned int>> allViews, unsigned int maxPop) {
+vector<vector<string>> solve(map<string, long long> sumViews, map<string, map<string, long long>> allViews, long long maxPop) {
     vector<vector<string>> result;
     for (auto e: sumViews) {
         string name = e.first;
@@ -38,10 +41,10 @@ vector<vector<string>> solve(map<string, unsigned int> sumViews, map<string, map
 }
 
 vector<vector<string>> mostPopularCreator(vector<string>& creators, vector<string>& ids, vector<int>& views) {
-    unsigned int maxPop = 0;
-    map<string, unsigned int> sumViews;
-    map<string, map<string, unsigned int>>  allViews;
-    for(auto i = 0; i < int(creators.size()); i++) {
+    long long maxPop = 0;
+    map<string, long long> sumViews;
+    map<string, map<string, long long>>  allViews;
+    for(auto i = 0; i < (int)creators.size(); i++) {
         string name = creators[i];
         string idName = ids[i];
         int view = views[i];
@@ -80,9 +83,9 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    vector<string> creators = {"alice","bob","alice","chris"};
-    vector<string> ids = {"one","two","three","four"};
-    vector<int> views = {5,10,5,4};
+    vector<string> creators = {"alice","alice","alice"};
+    vector<string> ids = {"a","b","c"};
+    vector<int> views = {1,2,2};
 
     show(mostPopularCreator(creators, ids, views));
     return 0;
