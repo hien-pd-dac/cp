@@ -15,29 +15,45 @@
 using namespace std;
 
 class Task {
-public:
+private:
+  // TODO: declare private variables
   int n;
   int input;
   int output;
 
+  // TODO: declare util private methods
+  void util();
+
+public:
+  Task();
   void Solve();
 };
 
-void Task::Solve() {
+Task::Task() {
+  // TODO: init default values, read input
   cin >> n;
-  for (auto i = 0; i < n; i++) {
-    cin >> input;
-  }
+  cin >> input;
+}
+
+void Task::Solve() {
+  util();
   cout << output << endl;
   return;
 }
 
+void Task::util() {
+  // TODO: util method
+  return;
+}
+
 int main() {
-  // freopen("input.txt", "r", stdin);
-  // freopen("output.txt", "w", stdout);
   ios::sync_with_stdio(false);
   cin.tie(0);
-  Task t;
-  t.Solve();
+  int testCases;
+  cin >> testCases;
+  while (testCases--) {
+    Task t;
+    t.Solve();
+  }
   return 0;
 }
