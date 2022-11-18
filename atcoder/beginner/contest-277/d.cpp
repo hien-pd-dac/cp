@@ -19,15 +19,11 @@ using namespace std;
 class Task {
 public:
   int n, m;
-  umap<int, int> cards;
+  map<int, int> cards;
   ll sumOfCards;
   ll minSum;
 
-  umap<int, bool> ready;
-  umap<int, ll> S;
-
   void Solve();
-  ll Play(int card);
 };
 
 void Task::Solve() {
@@ -39,13 +35,35 @@ void Task::Solve() {
     sumOfCards += card;
     cards[card] += 1;
   }
-  if (cards.size() == size_t(m)) {
+  int size = int(cards.size());
+  if (size == m) {
     cout << 0 << endl;
     return;
   }
+
+  vector<pair<int, int>> vcards;
   for (auto e : cards) {
-    auto card = e.first;
-    Play(card);
+    vcards.push_back(e);
+  }
+  cards.clear();
+
+  int startIdx;
+  for (auto i = 0; i < size; i++) {
+    if (vcards[(i + 1) % size].first != (vcards[i].first + 1) % m) {
+      startIdx = i;
+      break;
+    }
+  }
+  umap<int, ll> S;
+  for (auto i = 0; i < size; i++) {
+    int curIdx = (startIdx - i + size) % size;
+    int nextIdx = (curIdx + 1 + size) % size, nextCard = vcards[nextIdx].first;
+    int curCard = vcards[curIdx].first, num = vcards[curIdx].second;
+    if (nextCard != (curCard + 1) % m) {
+      S[curCard] = sumOfCards - (ll)curCard * num;
+      continue;
+    }
+    S[curCard] = S[nextCard] - (ll)curCard * num;
   }
 
   minSum = sumOfCards;
@@ -55,23 +73,6 @@ void Task::Solve() {
   }
   cout << minSum << endl;
   return;
-}
-
-ll Task::Play(int card) {
-  if (ready[card]) {
-    return S[card];
-  }
-  auto num = cards[card];
-  auto next = (card + 1) % m;
-  auto remain = sumOfCards;
-  if (!cards.count(next)) {
-    remain = sumOfCards - (ll)num * card;
-  } else {
-    remain = Play(next) - (ll)num * card;
-  }
-  S[card] = remain;
-  ready[card] = true;
-  return remain;
 }
 
 int main() {
